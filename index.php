@@ -149,7 +149,7 @@
 	}
 	
 	function delete_favourite() {
-		if(empty($_REQUEST["id"])) {
+		if(empty($_REQUEST["id"]) && $_REQUEST["id"] != 0) {
 			json_error_reply("id undefined");
 		}
 		if(!is_logged_in()) {
