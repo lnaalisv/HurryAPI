@@ -53,6 +53,16 @@
 		$username = $_REQUEST["username"];
 		$password = $_REQUEST["password"];
 		$lines = file("users.txt");
+		foreach($lines as $line) {
+			$parts = explode($line,";");
+			$u = $parts[0];
+			$p = $parts[1];
+			if($u] == $username && $p == $password) {
+				echo "löyty!!";
+			} else {
+				echo "$u ei oo $username eikä $p $password";
+			}
+		}
 		json_reply($lines);
 	}
 	
