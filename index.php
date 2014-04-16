@@ -57,7 +57,7 @@
 			$parts = explode($line,";");
 			$u = $parts[0];
 			$p = $parts[1];
-			if($u] == $username && $p == $password) {
+			if($u == $username && $p == $password) {
 				echo "löyty!!";
 			} else {
 				echo "$u ei oo $username eikä $p $password";
