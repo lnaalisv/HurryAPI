@@ -35,9 +35,9 @@
 	
 	function check_authentication() {
 		$return_item = array();
-		$return_item["logged"] = false;
+		$return_item["check_authentication"] = false;
 		if(is_logged_in()) {
-			$return_item["logged"] = true;
+			$return_item["check_authentication"] = true;
 		}
 		json_reply($return_item);
 	}
@@ -49,7 +49,23 @@
 		$username = $_REQUEST["username"];
 		$password = $_REQUEST["password"];
 		
+		$lines = file("users.txt");
+		foreach($lines as $line) {
+			if(strlen($line) < 2) {
+				continue;
+			}
+			$parts = explode(";",$line);
+			$u = $parts[0];
+			if($u == $username) {
+				$return_item["register"] = false;
+				json_reply($return_item);
+			} 
+		}
+		
 		file_put_contents("users.txt", $username.";".$password."\n", FILE_APPEND);
+		start_session($username,$password);
+		$return_item["register"] = true;
+		json_reply($return_item);
 	}
 	
 	function login() {
@@ -59,8 +75,9 @@
 		$username = $_REQUEST["username"];
 		$password = $_REQUEST["password"];
 		$lines = file("users.txt");
+
+		$return_item = array();
 		foreach($lines as $line) {
-			echo "Tutkitaan: $line<br/>\n";
 			if(strlen($line) < 2) {
 				continue;
 			}
@@ -69,16 +86,19 @@
 			$p = $parts[1];
 			$p = preg_replace('~[\r\n]+~', '', $p);
 			if($u == $username && $p == $password) {
-				echo "löyty!!";
-			} else {
-				echo "$u ei oo $username eikä $p $password";
-			}
+				$return_item["login"] = true;
+				start_session($username,$password);
+				json_reply($return_item);
+			} 
 		}
-		json_reply($lines);
+		$return_item["login"] = false;
+		json_reply($return_item);
 	}
 	
 	function logout() {
+		$return_item["logout"] = true;
 		unset($_SESSION);
+		json_reply($return_item);
 	}
 	
 	function create_favourite() {
@@ -94,6 +114,11 @@
 	}
 	
 	/* INTERNAL FUNCTIONS */
+	
+	function start_session($username,$password) {
+		$_SESSION["username"] = $username;
+		$_SESSION["password"] = $password;
+	}
 	
 	function is_logged_in() {
 		if(!empty($_SESSION["user"]) && !empty($_SESSION["password"])) {
