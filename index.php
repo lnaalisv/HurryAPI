@@ -54,6 +54,7 @@
 		$password = $_REQUEST["password"];
 		$lines = file("users.txt");
 		foreach($lines as $line) {
+			echo "Tutkitaan: $line<br/>\n";
 			$parts = explode($line,";");
 			$u = $parts[0];
 			$p = $parts[1];
