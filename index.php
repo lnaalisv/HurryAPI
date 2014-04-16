@@ -1,9 +1,13 @@
 <?php
+	session_start();
+	
 	/* MAIN API PROGRAM */
+	
 	$methods = array();
 	$methods[] = "check_authentication";
 	$methods[] = "register";
 	$methods[] = "login";
+	$methods[] = "logout";
 	$methods[] = "create_favourite";
 	$methods[] = "get_favourites";
 	$methods[] = "delete_favourite";
@@ -43,7 +47,17 @@
 	}
 	
 	function login() {
-		json_error_reply("Not implemented.");
+		if(empty($_REQUEST["username"]) || empty($_REQUEST["password"])) {
+			json_error_reply("username or password undefined");
+		}
+		$username = $_REQUEST["username"];
+		$password = $_REQUEST["password"];
+		$lines = file("users.txt");
+		json_reply($lines);
+	}
+	
+	function logout() {
+		unset($_SESSION);
 	}
 	
 	function create_favourite() {
