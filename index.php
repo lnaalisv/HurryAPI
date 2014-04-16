@@ -102,11 +102,28 @@
 	}
 	
 	function create_favourite() {
-		json_error_reply("Not implemented.");
+		if(empty($_REQUEST["name"]) || empty($_REQUEST["coordinates"])) {
+			json_error_reply("name or coordinates undefined");
+		}
+		if(!is_logged_in()) {
+			json_error_reply("You need to login to use this function.");
+		}
+		$name = $_REQUEST["name"];
+		$coordinates = $_REQUEST["coordinates"];
+		$fname = $_SESSION["username"].".txt";
+		file_put_contents($fname, $name.";".$coordinates."\n", FILE_APPEND);
+		$return_item = array();
+		if(!chmod($fname,0777)) {
+			$return_item["error"] = "chmod failed";
+		}
+		$return_item["create_favourite"] = true;
+		json_reply($return_item);
 	}
 	
 	function get_favourites() {
-		json_error_reply("Not implemented.");
+		if(!is_logged_in()) {
+			json_error_reply("You need to login to use this function.");
+		}
 	}
 	
 	function delete_favourite() {
