@@ -97,7 +97,8 @@
 	
 	function logout() {
 		$return_item["logout"] = true;
-		unset($_SESSION);
+		unset($_SESSION["username"]);
+		unset($_SESSION["password"]);
 		json_reply($return_item);
 	}
 	
