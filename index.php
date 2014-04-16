@@ -43,7 +43,13 @@
 	}
 	
 	function register() {
-		json_error_reply("Not implemented.");
+		if(empty($_REQUEST["username"]) || empty($_REQUEST["password"])) {
+			json_error_reply("username or password undefined");
+		}
+		$username = $_REQUEST["username"];
+		$password = $_REQUEST["password"];
+		
+		file_put_contents("users.txt", $username.";".$password."\n", FILE_APPEND);
 	}
 	
 	function login() {
