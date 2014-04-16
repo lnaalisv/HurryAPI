@@ -61,9 +61,13 @@
 		$lines = file("users.txt");
 		foreach($lines as $line) {
 			echo "Tutkitaan: $line<br/>\n";
+			if(strlen($line) < 2) {
+				continue;
+			}
 			$parts = explode(";",$line);
 			$u = $parts[0];
 			$p = $parts[1];
+			$p = preg_replace('~[\r\n]+~', '', $p);
 			if($u == $username && $p == $password) {
 				echo "löyty!!";
 			} else {
