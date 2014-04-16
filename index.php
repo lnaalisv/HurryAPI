@@ -149,7 +149,28 @@
 	}
 	
 	function delete_favourite() {
-		json_error_reply("Not implemented.");
+		if(empty($_REQUEST["id"])) {
+			json_error_reply("id undefined");
+		}
+		if(!is_logged_in()) {
+			json_error_reply("You need to login to use this function.");
+		}
+		$id = $_REQUEST["id"];
+		$fname = $_SESSION["username"].".txt";
+		$str = "";
+		$lines = file($fname);
+		for($i = 0 ; $i < count($lines) ; $i++) {
+			if($i != $id) {
+				$str.=$lines[$i];
+			}
+		}
+		file_put_contents($fname, $str);
+		$return_item = array();
+		if(!chmod($fname,0777)) {
+			$return_item["error"] = "chmod failed";
+		}
+		$return_item["delete_favourite"] = true;
+		json_reply($return_item);
 	}
 	
 	/* INTERNAL FUNCTIONS */
