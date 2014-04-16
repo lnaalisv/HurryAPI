@@ -124,6 +124,28 @@
 		if(!is_logged_in()) {
 			json_error_reply("You need to login to use this function.");
 		}
+		$fname = $_SESSION["username"].".txt";
+		if(!file_exists($fname)) {
+			json_error_reply("user has no favourites");
+		}
+		$lines = file($fname);
+		
+		$items = array();
+		$x = 0;
+		foreach($lines as $line) {
+			$parts = explode(";",$line);
+			$u = $parts[0];
+			$p = $parts[1];
+			$p = preg_replace('~[\r\n]+~', '', $p);
+		
+			$item = array();
+			$item["id"] = $x;
+			$item["name"] = $u;
+			$item["coordinates"] = $p;
+			$x++;
+			$items[] = $item;
+		}
+		json_reply($items);
 	}
 	
 	function delete_favourite() {
