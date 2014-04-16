@@ -121,7 +121,7 @@
 	}
 	
 	function is_logged_in() {
-		if(!empty($_SESSION["user"]) && !empty($_SESSION["password"])) {
+		if(!empty($_SESSION["username"]) && !empty($_SESSION["password"])) {
 			return true;
 		}
 		return false;
