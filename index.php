@@ -55,7 +55,7 @@
 		$lines = file("users.txt");
 		foreach($lines as $line) {
 			echo "Tutkitaan: $line<br/>\n";
-			$parts = explode($line,";");
+			$parts = explode(";",$line);
 			$u = $parts[0];
 			$p = $parts[1];
 			if($u == $username && $p == $password) {
